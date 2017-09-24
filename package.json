@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/billscarp/liri-node-app#readme",
   "dependencies": {
+    "omdb": "^0.8.0",
     "request": "^2.82.0",
     "twitter": "^1.7.1"
   }
