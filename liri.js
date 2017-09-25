@@ -3,12 +3,14 @@ var request = require('request');
 var twitter = require('twitter');
 var keys = require('./keys.js');
 var client = new twitter(keys);
+var spotify = require('spotify-web-api-node');
+
 function getMovieInfo() {
   // Grab or assemble the movie name and store it in a variable called "movieName"
   var movieName = (process.argv[3]);
 
-  
-  if ( !process.argv[3] ) {
+
+  if (!process.argv[3]) {
     console.log('Please enter a movie to search for!');
   } else {
     // Then run a request to the OMDB API with the movie specified
@@ -21,13 +23,13 @@ function getMovieInfo() {
 
     // Then create a request to the queryUrl
     // ...
-    request(queryUrl, function(error, response, body) {
+    request(queryUrl, function (error, response, body) {
       if (error) {
         return console.log(error);
-      } 
+      }
       // If the request is successful
       // ...
-      if ( response.statusCode === 200 ) {
+      if (response.statusCode === 200) {
         body = JSON.parse(body); // change the body parameter itself to something else
         // var data = JSON.parse(body);
 
@@ -48,21 +50,64 @@ function getMovieInfo() {
 
 
 function getSongInfo() {
+
+
+  /**
+   * This example retrives an access token using the Client Credentials Flow. It's well documented here:
+   * https://developer.spotify.com/web-api/authorization-guide/#client_credentials_flow
+   */
+
+  /*
+   * https://developer.spotify.com/spotify-web-api/using-scopes/
+   */
+
+  /**
+   * Set the credentials given on Spotify's My Applications page.
+   * https://developer.spotify.com/my-applications
+   */
+  var spotifyApi = new spotify({
+    clientId: '394fe3cf96eb43b0bccbb13bf8ef04c5',
+    clientSecret: '66195c732a154ee393f3e2ff10abdc71',
+  });
+
+  // Retrieve an access token
+  spotifyApi.clientCredentialsGrant()
+    .then(function (data) {
+      console.log('The access token expires in ' + data.body['expires_in']);
+      console.log('The access token is ' + data.body['access_token']);
+
+      // Save the access token so that it's used in future calls
+      spotifyApi.setAccessToken(data.body['access_token']);
+      spotifyApi.searchTracks('Love', function (err, data) {
+        if (err) {
+          console.error('Something went wrong', err.message);
+          return;
+
+        }})
+        .then(function (response) {
+          console.log(response)
+      });
+    }, function (err) {
+      console.log('Something went wrong when retrieving an access token', err.message);
+    });
+
   console.log('song search');
 }
 
 function gettweets() {
   console.log('twiiter');
-  var params = {screen_name: 'BillyUCFbc'};
-  client.get('statuses/user_timeline', params, function(error, tweets, response) {
+  var params = {
+    screen_name: 'BillyUCFbc'
+  };
+  client.get('statuses/user_timeline', params, function (error, tweets, response) {
     if (!error) {
       for (i = 0; i < tweets.length; i++) {
-      console.log(tweets[i].text);
-      
-     }
+        console.log(tweets[i].text);
+
+      }
     }
   });
-  
+
 }
 
 var command = process.argv[2];
@@ -75,8 +120,7 @@ switch (command) {
   case 'spotify-this-song':
     getSongInfo();
     break;
-    case 'mytweets':
+  case 'mytweets':
     gettweets();
-  
 
 }
