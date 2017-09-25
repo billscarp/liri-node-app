@@ -1,6 +1,6 @@
 // This is the request to the OMDB database 
 var request = require('request');
-
+console.log("object");
 function getMovieInfo() {
   // Grab or assemble the movie name and store it in a variable called "movieName"
   var movieName = (process.argv[3]);
