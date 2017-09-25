@@ -50,21 +50,15 @@ function getMovieInfo() {
 
 
 function getSongInfo() {
+  var songTitle = "";
 
+  for (let i = 3; i < process.argv.length; i++) {
+    songTitle += process.argv[i] + " ";
+  }
+  //songTitle = encodeURIComponent(songTitle);
+  console.log(songTitle);
 
-  /**
-   * This example retrives an access token using the Client Credentials Flow. It's well documented here:
-   * https://developer.spotify.com/web-api/authorization-guide/#client_credentials_flow
-   */
-
-  /*
-   * https://developer.spotify.com/spotify-web-api/using-scopes/
-   */
-
-  /**
-   * Set the credentials given on Spotify's My Applications page.
-   * https://developer.spotify.com/my-applications
-   */
+  
   var spotifyApi = new spotify({
     clientId: '394fe3cf96eb43b0bccbb13bf8ef04c5',
     clientSecret: '66195c732a154ee393f3e2ff10abdc71',
@@ -78,14 +72,18 @@ function getSongInfo() {
 
       // Save the access token so that it's used in future calls
       spotifyApi.setAccessToken(data.body['access_token']);
-      spotifyApi.searchTracks('Love', function (err, data) {
+      spotifyApi.searchTracks(songTitle, function (err, data) {
         if (err) {
           console.error('Something went wrong', err.message);
           return;
 
-        }})
+        }
+      })
         .then(function (response) {
-          console.log(response)
+          console.log(response.body.tracks.items[0]);
+          console.log(response.body.tracks.items[0].artists);
+
+
       });
     }, function (err) {
       console.log('Something went wrong when retrieving an access token', err.message);
@@ -93,6 +91,7 @@ function getSongInfo() {
 
   console.log('song search');
 }
+
 
 function gettweets() {
   console.log('twiiter');
