@@ -1,50 +1,60 @@
 // This is the request to the OMDB database 
+var request = require('request');
+
+function getMovieInfo() {
+  // Grab or assemble the movie name and store it in a variable called "movieName"
+  var movieName = (process.argv[3]);
+
+  
+  if ( !process.argv[3] ) {
+    console.log('Please enter a movie to search for!');
+  } else {
+    // Then run a request to the OMDB API with the movie specified
+    var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
 
 
-const request = require('request');
-
-// Grab or assemble the movie name and store it in a variable called "movieName"
-var movieName = (process.argv[2]);
-// ...
-if (process.argv.length == 2) {
-  console.log('Please ener a movie to search for!');
-  retern;
-} else {
-  for (let i = 2; i < process.argv.length; i++) {
-      movieName += process.argv[i] + " ";
-  }movieName = encodeURIComponent(movieName);
-}
-
-// Then run a request to the OMDB API with the movie specified
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
+    // This line is just to help us debug against the actual URL.
+    console.log(queryUrl);
 
 
-// This line is just to help us debug against the actual URL.
-console.log(queryUrl);
+    // Then create a request to the queryUrl
+    // ...
+    request(queryUrl, function(error, response, body) {
+      if (error) {
+        return console.log(error);
+      } 
+      // If the request is successful
+      // ...
+      if ( response.statusCode === 200 ) {
+        body = JSON.parse(body); // change the body parameter itself to something else
+        // var data = JSON.parse(body);
 
-
-// Then create a request to the queryUrl
-// ...
-request(queryUrl, function(error, response, body) {
-  if (error) {
-    return console.log(error);
-  } 
-  // If the request is successful
-  // ...
-  if (!error && response.statusCode === 200) {
-    
         // Then log the body from the site!
-        console.log("Title:", JSON.parse(body).Title);
-        console.log("Released:", JSON.parse(body).Year);
-        console.log("IMDB Rating:", JSON.parse(body).imdbRating);
-        console.log("Rotten Tomatoes Rating:", JSON.parse(body).Ratings[1].Value);
-        console.log("Country produced:", JSON.parse(body).Country);
-        console.log("Language:", JSON.parse(body).Language);
-        console.log("Plot:", JSON.parse(body).Plot);
-        console.log("Actors:", JSON.parse(body).Actors);
+        console.log("Title:", body.Title);
+        console.log("Released:", body.Year);
+        console.log("IMDB Rating:", body.imdbRating);
+        console.log("Rotten Tomatoes Rating:", body.Ratings[1].Value);
+        console.log("Country produced:", body.Country);
+        console.log("Language:", body.Language);
+        console.log("Plot:", body.Plot);
+        console.log("Actors:", body.Actors);
 
       }
-  // Then log the Release Year for the movie
-  // ...
+    });
+  }
+}
 
-});
+
+function getSongInfo() {
+  console.log('song search');
+}
+
+var command = process.argv[2];
+
+switch (command) {
+  case 'movie-this':
+    getMovieInfo();
+    break;
+  case 'spotify-this-song':
+    getSongInfo();
+}
