@@ -1,6 +1,8 @@
 // This is the request to the OMDB database 
 var request = require('request');
-console.log("object");
+var twitter = require('twitter');
+var keys = require('./keys.js');
+var client = new twitter(keys);
 function getMovieInfo() {
   // Grab or assemble the movie name and store it in a variable called "movieName"
   var movieName = (process.argv[3]);
@@ -49,12 +51,32 @@ function getSongInfo() {
   console.log('song search');
 }
 
-var command = process.argv[2];
+function gettweets() {
+  console.log('twiiter');
+  var params = {screen_name: 'BillyUCFbc'};
+  client.get('statuses/user_timeline', params, function(error, tweets, response) {
+    if (!error) {
+      for (i = 0; i < tweets.length; i++) {
+      console.log(tweets[i].text);
+      
+     }
+    }
+  });
+  
+}
 
+var command = process.argv[2];
+console.log(command);
 switch (command) {
   case 'movie-this':
     getMovieInfo();
+    console.log("Movie has been called")
     break;
   case 'spotify-this-song':
     getSongInfo();
+    break;
+    case 'mytweets':
+    gettweets();
+  
+
 }
