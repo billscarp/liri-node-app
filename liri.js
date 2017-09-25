@@ -80,8 +80,11 @@ function getSongInfo() {
         }
       })
         .then(function (response) {
-          console.log(response.body.tracks.items[0]);
-          console.log(response.body.tracks.items[0].artists);
+          console.log(response.body.tracks.items[0].artists[0].name);
+          console.log(response.body.tracks.items[0].name);
+          console.log(response.body.tracks.items[0].album.name);
+          console.log(response.body.tracks.items[0].preview_url);
+         
 
 
       });
