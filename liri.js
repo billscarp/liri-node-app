@@ -4,6 +4,7 @@ var twitter = require('twitter');
 var keys = require('./keys.js');
 var client = new twitter(keys);
 var spotify = require('spotify-web-api-node');
+var fs = require('fs');
 
 function getMovieInfo() {
   // Grab or assemble the movie name and store it in a variable called "movieName"
