@@ -126,3 +126,10 @@ switch (command) {
     gettweets();
 
 }
+
+// 1. So far so good.  I still need to add the fs require along with the readfile code which I will do when I get home
+
+// 2. Code if/else statements for Mr. Nobody and Ace of Base
+
+// Add comentary so people know what I was doing and so I can remember what I was doing myself.
+
